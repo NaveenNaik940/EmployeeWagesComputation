@@ -101,7 +101,7 @@ def main():
         total_wage=0
         while work_hour<=TOTAL_WORKING_HOUR and  work_day<=WORKING_DAY:
             if is_present():
-                if is_part_time_or_full_time=="Full_time":
+                if is_part_time_or_full_time()=="Full_time":
                     work_hour+=FULL_TIME_HOUR
                     wage_list.append(employee_daily_wage(WAGE_PER_HOUR,FULL_TIME_HOUR))
                     total_wage+=employee_daily_wage(WAGE_PER_HOUR,FULL_TIME_HOUR)
