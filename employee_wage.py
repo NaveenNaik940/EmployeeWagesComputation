@@ -1,10 +1,10 @@
 '''
 
 @Author:Naveen Madev Naik
-@Date: 2024-08-01 15:20:00
+@Date: 2024-08-02 15:20:00
 @Last Modified by: Naveen Madev Naik
-@Last Modified time: 2024-08-01 
-@Title :Refactoring the Code to write a Class Method to Compute Employee Wage
+@Last Modified time: 2024-08-02 
+@Title :Compute Employee Wage for multiple companies
 
 '''
 
@@ -12,14 +12,17 @@
 import random
 
 class EmployeeWage:
-    WAGE_PER_HOUR = 20
-    FULL_TIME_HOUR = 8
-    PART_TIME_HOUR = 4
-    WORKING_DAY = 20
-    TOTAL_WORKING_HOUR = 100
-     
+
+    def __init__(self, wage_per_hour, full_time_hour, part_time_hour, working_day, total_working_hour):
+        self.wage_per_hour = wage_per_hour
+        self.full_time_hour = full_time_hour
+        self.part_time_hour = part_time_hour
+        self.working_day = working_day
+        self.total_working_hour = total_working_hour
+
+
     @staticmethod
-    def display_welcome_message(cls):
+    def display_welcome_message():
         
         
         """
@@ -27,14 +30,14 @@ class EmployeeWage:
             Will print the welcome message.
 
         Parameter:
-            cls: Represents the class itself.
-
+            None
         Return:
             None        
         """
         
         
         print("Hello Everyone welcome to Employee Wage Computation")
+
 
     @classmethod
     def is_part_time_or_full_time(cls):
@@ -91,8 +94,8 @@ class EmployeeWage:
         
         
         return work_hour * wage_per_hour
-    @classmethod
-    def compute_wages(cls):
+    
+    def compute_wages(self):
         
         
         """
@@ -100,10 +103,10 @@ class EmployeeWage:
             Computes the wages for the employee for a month.
 
         Parameter:
-            cls: Represents the class itself.
+            self: Represents the instance of class.
 
         Return:
-            None
+            dictionary
         """
         
         
@@ -112,16 +115,16 @@ class EmployeeWage:
             work_hour = 0
             wage_list = []
             total_wage = 0
-            print("Employee Wage for the month:")
+            wages_dict={}
 
-            while work_hour <= cls.TOTAL_WORKING_HOUR and work_day <= cls.WORKING_DAY:
-                if EmployeeWage.is_present():
+            while work_hour <= self.total_working_hour and work_day <= self.working_day:
+                if self.is_present():
                     if EmployeeWage.is_part_time_or_full_time() == "Full_time":
-                        work_hour += cls.FULL_TIME_HOUR
-                        daily_wage = EmployeeWage.employee_daily_wage(cls.WAGE_PER_HOUR, cls.FULL_TIME_HOUR)
+                        work_hour += self.full_time_hour
+                        daily_wage = EmployeeWage.employee_daily_wage(self.wage_per_hour, self.full_time_hour)
                     else:
-                        work_hour += cls.PART_TIME_HOUR
-                        daily_wage = EmployeeWage.employee_daily_wage(cls.WAGE_PER_HOUR, cls.PART_TIME_HOUR)
+                        work_hour += self.part_time_hour
+                        daily_wage = EmployeeWage.employee_daily_wage(self.wage_per_hour, self.part_time_hour)
 
                     wage_list.append(daily_wage)
                     total_wage += daily_wage
@@ -129,17 +132,35 @@ class EmployeeWage:
                     wage_list.append(0)
                 
                 work_day += 1
-
-            print("Wage list of Employee ($):")
-            print(wage_list)
-            print(f"Total wage: {total_wage}$")
-
+            
+            wages_dict={"wage_list":wage_list,"total_wage":total_wage}
+            return wages_dict
         except Exception as e:
             print(e)
+    
 
 def main():
     EmployeeWage.display_welcome_message()
-    EmployeeWage.compute_wages()
+    companies = [
+        {"name": "BridgeLabz", "wage_per_hour": 15, "full_time_hour": 8, "part_time_hour": 4, "working_days": 24, "total_working_hours": 100},
+        {"name": "Truemind", "wage_per_hour": 22, "full_time_hour": 8, "part_time_hour": 4, "working_days": 22, "total_working_hours": 110},
+        {"name": "Accenture", "wage_per_hour": 18, "full_time_hour": 8, "part_time_hour": 4, "working_days": 25, "total_working_hours": 120}
+    ]
+    wage_dict={}
+    for company in companies:
+        print(f"\nComputing wages for {company['name']}:")
+        employee_wage = EmployeeWage(
+            wage_per_hour=company["wage_per_hour"],
+            full_time_hour=company["full_time_hour"],
+            part_time_hour=company["part_time_hour"],
+            working_day=company["working_days"],
+            total_working_hour=company["total_working_hours"]
+        )
+        wage_dict[company['name']]=employee_wage.compute_wages()
+        print(f"Employee wages list in {company['name']}: ")
+        print(wage_dict[company['name']]['wage_list'])
+        print(f"total wage: {wage_dict[company['name']]['total_wage']}$")
+      
 
 
 if __name__ == "__main__":
