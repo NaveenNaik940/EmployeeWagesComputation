@@ -4,101 +4,217 @@
 @Date: 2024-08-04 15:20:00
 @Last Modified by: Naveen Madev Naik
 @Last Modified time: 2024-08-04 
-@Title :Compute Employee Wage for multiple companies and Ability to manage Employee Wage of multiple companies
+@Title :Compute Employee Wage for multiple companies and Ability to manage wage for multiple companies with CRUD operations for companies and employees
 
 '''
 
 
 import random
 
-class EmployeeWage:
+class Employee:
+    def __init__(self, name):
+        self.employee_name = name
+        self.total_wage = 0
+        self.wage_list = []
 
-    def __init__(self, wage_per_hour, full_time_hour, part_time_hour, working_day, total_working_hour):
+    def __str__(self):
+        return f"Employee: {self.employee_name}, Total Wage: {self.total_wage}, Wage List: {self.wage_list}"
+
+class CompanyEmpWage:
+    def __init__(self, company_name, wage_per_hour, full_time_hour, part_time_hour, working_day, total_working_hour):
+        self.company_name = company_name
         self.wage_per_hour = wage_per_hour
         self.full_time_hour = full_time_hour
         self.part_time_hour = part_time_hour
         self.working_day = working_day
         self.total_working_hour = total_working_hour
+        self.employees = []
+
+    def add_employee(self, employee):
+
+        """
+        Descriptionn:
+            function adds the employee to employee list
+
+        Parameter:
+            employee:input from user 
+
+        Return:
+            None
+        """
+
+        self.employees.append(employee)
+
+    def remove_employee(self, employee_name):
+
+
+        """
+        Descriptionn:
+            function removes the employee from employee list
+
+        Parameter:
+            employee_name:name of employee which want to remove from employee list 
+
+        Return:
+            None
+        """
+
+        self.employees = [emp for emp in self.employees if emp.name != employee_name]
+
+
+    def update_employee(self, old_name, new_name):
+
+
+        """
+        Descriptionn:
+            function updates the employee name from old name to new name in  employee list
+
+        Parameter:
+            old_name:old name of employee
+            new_name:new name of employee 
+        
+        Return:
+            None
+        """
+
+        employee = self.get_employee(old_name)
+        if employee:
+            employee.name = new_name
+
+
+    def get_employee(self, employee_name):
+
+
+        """
+        Descriptionn:
+            function will get the employee information
+
+        Parameter:
+            employee_name:input from user 
+
+        Return:
+            string
+        """  
+
+
+        for employee in self.employees:
+            if employee.name == employee_name:
+                return employee
+        return None
+
+
+    def __str__(self):
+        return (f"Company: {self.company_name}, Wage Per Hour: {self.wage_per_hour}, "
+                f"Full Time Hour: {self.full_time_hour}, Part Time Hour: {self.part_time_hour}, "
+                f"Working Day: {self.working_day}, Total Working Hour: {self.total_working_hour}, "
+                f"Employees: {[str(emp) for emp in self.employees]}")
+
+
+class EmpWageBuilder:
+    def __init__(self):
+        self.company_emp_wage_list = []
+
+    def add_company_emp_wage(self, company_emp_wage):
+
+        """
+        Descriptionn:
+            function adds the company employee wage to company wage list
+
+        Parameter:
+            company_emp_wage:input from user that is company employee wage
+
+        Return:
+            None
+        """
+
+        self.company_emp_wage_list.append(company_emp_wage)
+
+
+    def remove_company_emp_wage(self, company_name):
+
+        """
+        Descriptionn:
+            function removes the company name from company wage list
+
+        Parameter:
+            company_name:input from user to remove its details from list 
+
+        Return:
+            None
+        """
+
+        self.company_emp_wage_list = [company for company in self.company_emp_wage_list if company.company_name != company_name]
+
+    def update_company_emp_wage(self, old_company_name, new_company_emp_wage):
+
+        """
+        Descriptionn:
+            function updates the old company name to new company name from company wage list
+
+        Parameter:
+            old_company_name:input from user that old company name
+            new_company_name:input from user that is new company name 
+
+        Return:
+            None
+        """
+
+        for index, company in enumerate(self.company_emp_wage_list):
+            if company.company_name == old_company_name:
+                self.company_emp_wage_list[index] = new_company_emp_wage
+
+
+
+    def get_company_emp_wage(self, company_name):
+
+        """
+        Descriptionn:
+            function gets the company details from company wage list
+
+        Parameter:
+            company_name:input from user to get its details from list 
+
+        Return:
+            dict
+        """    
+        for company in self.company_emp_wage_list:
+            if company.company_name == company_name:
+                return company
+        return None
 
 
     def compute_wages(self):
-        
+
         
         """
         Description:
-            Computes the wages for the employee for a month.
+            Computes the wages for the employee for a month different company and its employee.
 
         Parameter:
             self: Represents the instance of class.
 
         Return:
-            dictionary
-        """
-        
-        
-        try:
-            work_day = 1
-            work_hour = 0
-            wage_list = []
-            total_wage = 0
-            wages_dict={}
-
-            while work_hour <= self.total_working_hour and work_day <= self.working_day:
-                if EmployeeWage.is_present():
-                    if EmployeeWage.is_part_time_or_full_time() == "Full_time":
-                        work_hour += self.full_time_hour
-                        daily_wage = EmployeeWage.employee_daily_wage(self.wage_per_hour, self.full_time_hour)
-                    else:
-                        work_hour += self.part_time_hour
-                        daily_wage = EmployeeWage.employee_daily_wage(self.wage_per_hour, self.part_time_hour)
-
-                    wage_list.append(daily_wage)
-                    total_wage += daily_wage
-                else:
-                    wage_list.append(0)
-                
-                work_day += 1
-            
-            wages_dict={"wage_list":wage_list,"total_wage":total_wage}
-            return wages_dict
-        except Exception as e:
-            print(e)
-
-
-    @staticmethod
-    def display_welcome_message():
-        
-        
-        """
-        Description:
-            Will print the welcome message.
-
-        Parameter:
             None
-        Return:
-            None        
         """
-        
-        
-        print("Hello Everyone welcome to Employee Wage Computation")
+        for company in self.company_emp_wage_list:
+            for employee in company.employees:
+                self.compute_monthly_wage(company, employee)
 
 
     @staticmethod
-    def is_part_time_or_full_time():
-        
-        
+    def get_employee_type():
+
         """
         Description:
-            The function will return part time or full time.
+            The function will return whether employee is part time or full time.
 
         Parameter:
             None.
 
         Return:
             str:Part_time or Full_time    
-        """
-        
-        
+        """ 
+
         return random.choice(["Part_time", "Full_time"])
 
     @staticmethod
@@ -119,8 +235,8 @@ class EmployeeWage:
         
         return random.choice([True, False])
 
-    @classmethod
-    def employee_daily_wage(cls, wage_per_hour, work_hour):
+    @staticmethod
+    def employee_daily_wage(wage_per_hour, work_hour):
         
         
         """
@@ -136,129 +252,128 @@ class EmployeeWage:
             int
         """
         
-        
         return work_hour * wage_per_hour
-    
 
 
-
-class EmpWageBuilder:
-    def __init__(self):
-        self.company_wages = {}
-
-    def add_company(self, company_name, wage_per_hour, full_time_hour, part_time_hour, working_day, total_working_hour):
-
-
-        """
-        Description:
-            Adds a company to the wage builder.
-
-        Parameters:
-            company_name (str): The name of the company
-            wage_per_hour (int): Wage per hour for the company
-            full_time_hour (int): Full-time hours for the company
-            part_time_hour (int): Part-time hours for the company
-            working_day (int): Number of working days for the company
-            total_working_hour (int): Total working hours for the company
-
-        Return:
-            None
-        """
-
-
-        employee_wage = EmployeeWage(
-            company_name=company_name,
-            wage_per_hour=wage_per_hour,
-            full_time_hour=full_time_hour,
-            part_time_hour=part_time_hour,
-            working_day=working_day,
-            total_working_hour=total_working_hour
-        )
-        self.company_wages[company_name] = employee_wage
-
-    def compute_wages(self):
-
-
-        """
-        Description:
-            Computes the wages for all added companies.
-
-        Parameter:
-            None
-
-        Return:
-            None
-        """
-
+    def compute_monthly_wage(self, company, employee):
         
-        for company, employee_wage in self.company_wages.items():
-            wages = employee_wage.compute_wages()
-            print(f"\nComputing wages for {company}:")
-            print(f"Employee wages list in {company}: ")
-            print(wages['wage_list'])
-            print(f"Total wage: {wages['total_wage']}$")
-
-
-class EmpWageBuilder:
-
-    def __init__(self):
-        self.company_wages = {}
-
-    def add_company(self, company_name, wage_per_hour, full_time_hour, part_time_hour, working_day, total_working_hour):
         """
         Description:
-            Adds a company to the wage builder.
-
-        Parameters:
-            company_name (str): The name of the company
-            wage_per_hour (int): Wage per hour for the company
-            full_time_hour (int): Full-time hours for the company
-            part_time_hour (int): Part-time hours for the company
-            working_day (int): Number of working days for the company
-            total_working_hour (int): Total working hours for the company
-
-        Return:
-            None
-        """
-        employee_wage = EmployeeWage(
-            wage_per_hour=wage_per_hour,
-            full_time_hour=full_time_hour,
-            part_time_hour=part_time_hour,
-            working_day=working_day,
-            total_working_hour=total_working_hour
-        )
-        self.company_wages[company_name] = employee_wage
-
-    def compute_wages(self):
-        """
-        Description:
-            Computes the wages for all added companies.
+            Computes the wages for the employee in a company  for a month.
 
         Parameter:
-            None
+            self: Represents the instance of class.
+            company:dict of company details
+            employee:dict of employee details
 
         Return:
             None
-        """
-        for company, employee_wage in self.company_wages.items():
-            wages = employee_wage.compute_wages()
-            print(f"\nComputing wages for {company}:")
-            print(f"Employee wages list in {company}: ")
-            print(wages['wage_list'])
-            print(f"Total wage: {wages['total_wage']}$")
+        """        
+        work_day = 1
+        work_hour = 0
+        total_wage = 0
+
+        while work_hour <= company.total_working_hour and work_day <= company.working_day:
+            if self.is_present() == "Present":
+                daily_work_hours = company.full_time_hour if self.get_employee_type() == "Full_time" else company.part_time_hour
+                work_hour += daily_work_hours
+                daily_wage = self.employee_daily_wage(company.wage_per_hour, daily_work_hours)
+                employee.wage_list.append(daily_wage)
+                total_wage += daily_wage
+            else:
+                employee.wage_list.append(0)
+            work_day += 1
+
+        employee.total_wage = total_wage
+        print(f"\n{employee.name}'s Wage List: {employee.wage_list}")
+        print(f"Total wage for {employee.name} in {company.company_name}: ${employee.total_wage}")
 
 def main():
-    EmployeeWage.display_welcome_message()
-    
-    emp_wage_builder = EmpWageBuilder()
-    no_of_company=int(input("enter the number of company you want to add : "))
-    for index in range(no_of_company):
-        emp_wage_builder.add_company(input("enter the company name: "), int(input("wage per hour: ")), int(input("full time hour: ")), int(input("part time hour: ")),int(input("working day :")),int(input("total working hour: ")))
-        print()
-    
-    emp_wage_builder.compute_wages()
-      
+    try:
+        builder = EmpWageBuilder()
+        
+        while True:
+            print("\n1. Add Company\n2. Update Company\n3. Delete Company\n4. Manage Employees\n5. Compute Wages\n6. Display Companies\n7. Exit")
+            choice = input("Enter your choice: ")
 
+            if choice == "1":
+                company_name = input("Enter company name: ").upper()
+                wage_per_hour = int(input("Enter wage per hour: "))
+                full_time_hour = int(input("Enter full-time hours: "))
+                part_time_hour = int(input("Enter part-time hours: "))
+                working_day = int(input("Enter working days: "))
+                total_working_hour = int(input("Enter total working hours: "))
+                new_company = CompanyEmpWage(company_name, wage_per_hour, full_time_hour, part_time_hour, working_day, total_working_hour)
+                builder.add_company_emp_wage(new_company)
+
+            elif choice == "2":
+                old_company_name = input("Enter the name of the company to update: ").upper()
+                company = builder.get_company_emp_wage(old_company_name)
+                if company:
+                    company_name = input("Enter new company name: ").upper()
+                    wage_per_hour = int(input("Enter new wage per hour: "))
+                    full_time_hour = int(input("Enter new full-time hours: "))
+                    part_time_hour = int(input("Enter new part-time hours: "))
+                    working_day = int(input("Enter new working days: "))
+                    total_working_hour = int(input("Enter new total working hours: "))
+                    updated_company = CompanyEmpWage(company_name, wage_per_hour, full_time_hour, part_time_hour, working_day, total_working_hour)
+                    builder.update_company_emp_wage(old_company_name, updated_company)
+                else:
+                    print("Company not found!")
+
+            elif choice == "3":
+                company_name = input("Enter the name of the company to delete: ").upper()
+                builder.remove_company_emp_wage(company_name)
+                print(f"Company {company_name} removed.")
+
+            elif choice == "4":
+                company_name = input("Enter the name of the company to manage employees: ").upper()
+                company = builder.get_company_emp_wage(company_name)
+                if company:
+                    while True:
+                        print("\n1. Add Employee\n2. Update Employee\n3. Delete Employee\n4. Back to Main Menu")
+                        emp_choice = input("Enter your choice: ")[0]
+
+                        if emp_choice == "1":
+                            emp_name = input("Enter employee name: ").upper()
+                            new_employee = Employee(emp_name)
+                            company.add_employee(new_employee)
+
+                        elif emp_choice == "2":
+                            old_emp_name = input("Enter the name of the employee to update: ").upper()
+                            new_emp_name = input("Enter new employee name: ").upper()
+                            company.update_employee(old_emp_name, new_emp_name)
+
+                        elif emp_choice == "3":
+                            emp_name = input("Enter the name of the employee to delete: ").upper()
+                            company.remove_employee(emp_name)
+                            print(f"Employee {emp_name} removed from {company.company_name}.")
+
+                        elif emp_choice == "4":
+                            break
+
+                        else:
+                            print("Invalid choice! Please try again.")
+                else:
+                    print("Company not found!")
+
+            elif choice == "5":
+                builder.compute_wages()
+
+            elif choice == "6":
+                for company in builder.company_emp_wage_list:
+                    print(company)
+
+            elif choice == "7":
+                break
+
+            else:
+                print("Invalid choice! Please try again.")
+
+    except ValueError as e:
+        print(f"enter integer input.{e}")      
+    except Exception as e:
+        print(e)          
 
 if __name__ == "__main__":
     main()
