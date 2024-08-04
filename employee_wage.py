@@ -1,10 +1,10 @@
 '''
 
 @Author:Naveen Madev Naik
-@Date: 2024-08-02 15:20:00
+@Date: 2024-08-04 15:20:00
 @Last Modified by: Naveen Madev Naik
-@Last Modified time: 2024-08-02 
-@Title :Compute Employee Wage for multiple companies and ability to save the total Wage for each company
+@Last Modified time: 2024-08-04 
+@Title :Compute Employee Wage for multiple companies and Ability to manage Employee Wage of multiple companies
 
 '''
 
@@ -251,9 +251,10 @@ def main():
     EmployeeWage.display_welcome_message()
     
     emp_wage_builder = EmpWageBuilder()
-    emp_wage_builder.add_company("BridgeLabz", 15, 8, 4, 24, 100)
-    emp_wage_builder.add_company("Truemind", 22, 8, 4, 22, 110)
-    emp_wage_builder.add_company("Accenture", 18, 8, 4, 25, 120)
+    no_of_company=int(input("enter the number of company you want to add : "))
+    for index in range(no_of_company):
+        emp_wage_builder.add_company(input("enter the company name: "), int(input("wage per hour: ")), int(input("full time hour: ")), int(input("part time hour: ")),int(input("working day :")),int(input("total working hour: ")))
+        print()
     
     emp_wage_builder.compute_wages()
       
