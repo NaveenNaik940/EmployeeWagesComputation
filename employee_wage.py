@@ -290,13 +290,13 @@ class EmpWageBuilder:
 
 def main():
     try:
-        builder = EmpWageBuilder()
+        empBuilder = EmpWageBuilder()
         
         while True:
             print("\n1. Add Company\n2. Update Company\n3. Delete Company\n4. Manage Employees\n5. Compute Wages\n6. Display Companies\n7. Exit")
-            choice = input("Enter your choice: ")
+            choice = int(input("Enter your choice(integer): "))
 
-            if choice == "1":
+            if choice == 1:
                 company_name = input("Enter company name: ").upper()
                 wage_per_hour = int(input("Enter wage per hour: "))
                 full_time_hour = int(input("Enter full-time hours: "))
@@ -304,11 +304,11 @@ def main():
                 working_day = int(input("Enter working days: "))
                 total_working_hour = int(input("Enter total working hours: "))
                 new_company = CompanyEmpWage(company_name, wage_per_hour, full_time_hour, part_time_hour, working_day, total_working_hour)
-                builder.add_company_emp_wage(new_company)
+                empBuilder.add_company_emp_wage(new_company)
 
-            elif choice == "2":
+            elif choice == 2:
                 old_company_name = input("Enter the name of the company to update: ").upper()
-                company = builder.get_company_emp_wage(old_company_name)
+                company = empBuilder.get_company_emp_wage(old_company_name)
                 if company:
                     company_name = input("Enter new company name: ").upper()
                     wage_per_hour = int(input("Enter new wage per hour: "))
@@ -317,39 +317,39 @@ def main():
                     working_day = int(input("Enter new working days: "))
                     total_working_hour = int(input("Enter new total working hours: "))
                     updated_company = CompanyEmpWage(company_name, wage_per_hour, full_time_hour, part_time_hour, working_day, total_working_hour)
-                    builder.update_company_emp_wage(old_company_name, updated_company)
+                    empBuilder.update_company_emp_wage(old_company_name, updated_company)
                 else:
                     print("Company not found!")
 
-            elif choice == "3":
+            elif choice == 3:
                 company_name = input("Enter the name of the company to delete: ").upper()
-                builder.remove_company_emp_wage(company_name)
-                print(f"Company {company_name} removed.")
+                empBuilder.remove_company_emp_wage(company_name)
+                print(f"Company {company_name} is  removed from database.")
 
-            elif choice == "4":
+            elif choice == 4:
                 company_name = input("Enter the name of the company to manage employees: ").upper()
-                company = builder.get_company_emp_wage(company_name)
+                company = empBuilder.get_company_emp_wage(company_name)
                 if company:
                     while True:
                         print("\n1. Add Employee\n2. Update Employee\n3. Delete Employee\n4. Back to Main Menu")
-                        emp_choice = input("Enter your choice: ")[0]
+                        emp_choice = int(input("Enter your choice(integer): "))
 
-                        if emp_choice == "1":
+                        if emp_choice == 1:
                             emp_name = input("Enter employee name: ").upper()
                             new_employee = Employee(emp_name)
                             company.add_employee(new_employee)
 
-                        elif emp_choice == "2":
+                        elif emp_choice == 2:
                             old_emp_name = input("Enter the name of the employee to update: ").upper()
                             new_emp_name = input("Enter new employee name: ").upper()
                             company.update_employee(old_emp_name, new_emp_name)
 
-                        elif emp_choice == "3":
+                        elif emp_choice == 3:
                             emp_name = input("Enter the name of the employee to delete: ").upper()
                             company.remove_employee(emp_name)
                             print(f"Employee {emp_name} removed from {company.company_name}.")
 
-                        elif emp_choice == "4":
+                        elif emp_choice == 4:
                             break
 
                         else:
@@ -357,14 +357,14 @@ def main():
                 else:
                     print("Company not found!")
 
-            elif choice == "5":
-                builder.compute_wages()
+            elif choice == 5:
+                empBuilder.compute_wages()
 
-            elif choice == "6":
-                for company in builder.company_emp_wage_list:
+            elif choice == 6:
+                for company in empBuilder.company_emp_wage_list:
                     print(company)
 
-            elif choice == "7":
+            elif choice == 7:
                 break
 
             else:
